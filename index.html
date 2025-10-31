@@ -118,10 +118,57 @@
             transform: rotate(15deg);
             pointer-events: none;
         }
+        blockquote {
+            border-left: 3px solid #d32f2f;
+            padding-left: 1em;
+            color: #f2c7c7;
+            font-style: italic;
+            margin: 1.5em 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1em;
+            background-color: #1c1b1b;
+        }
+
+        th, td {
+            border: 1px solid #444;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #2c2b2b;
+            color: #ffcc80;
+        }
+
+        tr:nth-child(even) {
+            background-color: #181818;
+        }
+
+        tr:hover {
+            background-color: #252525;
+        }
+
+        section {
+            margin-bottom: 3em;
+        }
+
+        #flight-summary blockquote {
+            border-color: #b71c1c;
+            color: #f7b2b2;
+            font-size: 1.1rem;
+            text-align: center;
+        }
         @media screen and (max-width: 767px) {
             img{
                 max-width: 100%;
                 height: auto;
+            }
+            table {
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -151,6 +198,8 @@
         <li><a href="#The_Church_of_the_Sacred_Light">關於聖光教</a></li>
         <li><a href="#dracula">關於德古拉</a></li>
         <li><a href="#witch">關於伊索爾德</a></li>
+        <li><a href="#character-colors">角色視覺象徵色表</a></li>
+        <li><a href="#flight-system-design">飛行系統設計說明</a></li>
         <li><a href="#energy-mechanism">能量補充機制</a></li>
         <li><a href="#unique_entities">唯一的血族與唯一的女巫</a></li>
         <li><a href="#wanted_level">通緝等級系統</a></li>
@@ -390,6 +439,199 @@
     <p>
         在遊戲中，伊索爾德能化身為貓頭鷹，不僅呼應這些傳說，也讓玩家感受到她魔法能力的多樣性與智慧特質。
     </p>
+</section>
+<section id="character-colors">
+    <h2>🎨 角色視覺象徵色表</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>角色</th>
+            <th>髮色</th>
+            <th>眼睛顏色</th>
+            <th>視覺象徵</th>
+            <th>內在含義</th>
+            <th>色彩對比</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><strong>伊索爾德（Isolde）</strong></td>
+            <td style="color:#c0392b;">深紅色</td>
+            <td style="color:#27ae60;">翡翠綠</td>
+            <td>火與森的結合</td>
+            <td>熱情、理性、生命、智慧</td>
+            <td>與自然、魔力相呼應</td>
+        </tr>
+        <tr>
+            <td><strong>德古拉（Dracula）</strong></td>
+            <td style="color:#111;">漆黑</td>
+            <td>
+                <span style="color:#00b3b3;">冷碧色（常態）</span><br>
+                <span style="color:#c62828;">深紅（覺醒狀態）</span>
+            </td>
+            <td>夜與血的交錯</td>
+            <td>威嚴、理智、掠食、慾望</td>
+            <td>與伊索爾德形成「光與影」對比</td>
+        </tr>
+        </tbody>
+    </table>
+    <blockquote>
+        伊索爾德的紅與綠象徵「生命與理性」。<br>
+        德古拉的黑與紅象徵「夜與慾望」。<br>
+        他們的顏色在對立中尋找平衡。
+    </blockquote>
+    <section id="realistic-color-note">
+        <h3>🔬 現實基因與奇幻象徵對照</h3>
+        <p>雖然我們的奇幻角色色彩選擇有象徵意義，但它們也有現實基礎：</p>
+        <ul>
+            <li><strong>黑髮 + 藍眼：</strong>
+                <ul>
+                    <li>在白種人中確實存在，不算罕見。</li>
+                    <li>最常見的組合通常是深色髮+深色眼睛，或金髮+藍眼睛，但黑髮藍眼仍在現實族群中出現。</li>
+                    <li>影視角色例子：哈利波特、洛基、克拉克·肯特（電影或電視版本）。</li>
+                    <li>在奇幻設定中，這種組合仍可象徵神秘、冷靜、理性等特質，符合德古拉的角色定位。</li>
+                </ul>
+            </li>
+            <li><strong>紅髮 + 綠眼：</strong>
+                <ul>
+                    <li>比黑髮藍眼更罕見，但也存在於現實白種人中，尤其在凱爾特血統裡。</li>
+                    <li>適合作為奇幻角色的強烈視覺象徵，如魔力、火焰、生命力等。</li>
+                </ul>
+            </li>
+        </ul>
+        <p>💡 設定建議：即便選擇了不常見的組合，也不會破壞現實感，反而能增強角色辨識度與戲劇張力。</p>
+    </section>
+</section>
+<section id="flight-system-design">
+    <h2>🦇 飛行系統設計說明</h2>
+    <p><strong>主題：</strong>伊索爾德（女巫）與德古拉（吸血鬼）的飛行方式差異</p>
+
+    <section id="flight-principle">
+        <h3>✨ 設計原則</h3>
+        <p>
+            在本作世界觀中，「飛行」並非單純的超自然能力，而是各角色
+            <strong>力量來源與性質的具體表現</strong>。
+            為了維持世界觀一致性與角色平衡，我們將女巫與吸血鬼的飛行原理做出嚴格區分，
+            使兩者既能展現超凡能力，又不會破壞物理與戰鬥平衡。
+        </p>
+    </section>
+
+    <section id="isolde-flight">
+        <h3>🧙‍♀️ 伊索爾德（女巫）——念動力浮空</h3>
+        <h4>原理：</h4>
+        <p>
+            伊索爾德藉由強大的「隔空取物」（念動力）操控自身身體，
+            將浮力作用在自己身上以達成漂浮。
+            她的身體素質與普通人無異，無法長時間支撐高負載飛行，因此飛行速度緩慢、動作受限。
+        </p>
+
+        <h4>特性：</h4>
+        <ul>
+            <li>飄浮高度有限，可在中低空移動或停留。</li>
+            <li>無掃帚輔助時，移動速度較慢且難以快速轉向。</li>
+            <li>飛行需集中精神，消耗魔力；戰鬥時使用頻率受限。</li>
+            <li>飛行姿態輕盈優雅，符合她冷靜、理性的性格。</li>
+        </ul>
+
+        <h4>遊戲定位：</h4>
+        <ul>
+            <li>飛行作為<strong>戰術移動手段</strong>：閃避、俯瞰戰場、施法視角調整。</li>
+            <li>不適合高速追擊或長距離逃脫。</li>
+            <li>有明顯的魔力消耗與冷卻機制。</li>
+        </ul>
+
+        <blockquote>💡 設計重點：她的飛行是智慧與控制的象徵，而非力量的展現。</blockquote>
+    </section>
+
+    <section id="dracula-flight">
+        <h3>🧛‍♂️ 德古拉（吸血鬼）——翅膀飛行</h3>
+        <h4>原理：</h4>
+        <p>
+            德古拉以自身血能量啟動身體變異，在人形狀態下生出蝙蝠翅膀。
+            翅膀由暗能與肌肉組織構成，能支撐短距離高速飛行。
+            這種飛行屬於「肉體強化」，而非魔法懸浮。
+        </p>
+
+        <h4>特性：</h4>
+        <ul>
+            <li>飛行爆發力強、速度快，但持續時間有限。</li>
+            <li>飛行時無法精確操控方向，主要用於突襲與閃避。</li>
+            <li>翅膀受損或血能量不足時無法飛行。</li>
+            <li>飛行姿態充滿壓迫感與野性氣勢，展現掠食者本能。</li>
+        </ul>
+
+        <h4>遊戲定位：</h4>
+        <ul>
+            <li>飛行作為<strong>戰鬥技能延伸</strong>：空中突襲、俯衝攻擊、閃避技能。</li>
+            <li>強調短時爆發而非長時間移動。</li>
+            <li>需依血量或特定條件啟動，增加戰術選擇性。</li>
+        </ul>
+
+        <blockquote>💡 設計重點：翅膀飛行是力量與獸性的象徵，使德古拉的戰鬥更具侵略感與真實感。</blockquote>
+    </section>
+
+    <section id="flight-comparison">
+        <h3>⚖️ 平衡設計對比</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>面向</th>
+                <th>伊索爾德（女巫）</th>
+                <th>德古拉（吸血鬼）</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>飛行原理</td>
+                <td>念動力浮空（魔法）</td>
+                <td>翅膀飛行（肉體變異）</td>
+            </tr>
+            <tr>
+                <td>飛行速度</td>
+                <td>慢、穩定</td>
+                <td>快、爆發</td>
+            </tr>
+            <tr>
+                <td>飛行持續</td>
+                <td>可長時間漂浮但消耗魔力</td>
+                <td>持續短暫但瞬間爆發強</td>
+            </tr>
+            <tr>
+                <td>體力需求</td>
+                <td>消耗魔力</td>
+                <td>消耗血能量或體力</td>
+            </tr>
+            <tr>
+                <td>視覺風格</td>
+                <td>優雅、神秘</td>
+                <td>野性、威嚴</td>
+            </tr>
+            <tr>
+                <td>戰鬥用途</td>
+                <td>躲避、控制視野、施法</td>
+                <td>突襲、位移、俯衝攻擊</td>
+            </tr>
+            <tr>
+                <td>世界觀合理性</td>
+                <td>符合魔法法則</td>
+                <td>符合生理變異與物理邏輯</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section id="flight-summary">
+        <h3>🧩 設計理念總結</h3>
+        <blockquote>
+            女巫的飛行代表「理性與智慧對自然法則的駕馭」，<br>
+            吸血鬼的飛行代表「力量與本能對肉體極限的突破」。
+        </blockquote>
+        <p>
+            兩者同為超自然存在，但其飛行方式的差異讓角色之間形成了鮮明對比與平衡：<br>
+            — 女巫漂浮，是靠精神主宰物理。<br>
+            — 吸血鬼飛翔，是靠血肉征服空間。
+        </p>
+    </section>
 </section>
 <section id="energy-mechanism">
     <h2>能量補充機制</h2>
