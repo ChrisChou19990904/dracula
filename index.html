@@ -121,7 +121,7 @@
         blockquote {
             border-left: 3px solid #d32f2f;
             padding-left: 1em;
-            color: #f2c7c7;
+            color: orange;
             font-style: italic;
             margin: 1.5em 0;
         }
@@ -130,7 +130,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 1em;
-            background-color: #1c1b1b;
+            background-color: white;
         }
 
         th, td {
@@ -145,11 +145,12 @@
         }
 
         tr:nth-child(even) {
-            background-color: #181818;
+            background-color: white;
         }
 
         tr:hover {
             background-color: #252525;
+            color:white;
         }
 
         section {
@@ -161,6 +162,13 @@
             color: #f7b2b2;
             font-size: 1.1rem;
             text-align: center;
+        }
+        #black_and_white {
+            color:#111;
+        }
+        #black_and_white:hover{
+            color:#fff;
+            background-color:#111;
         }
         @media screen and (max-width: 767px) {
             img{
@@ -464,7 +472,7 @@
         </tr>
         <tr>
             <td><strong>德古拉（Dracula）</strong></td>
-            <td style="color:#111;">漆黑</td>
+            <td id="black_and_white">漆黑</td>
             <td>
                 <span style="color:#00b3b3;">冷碧色（常態）</span><br>
                 <span style="color:#c62828;">深紅（覺醒狀態）</span>
