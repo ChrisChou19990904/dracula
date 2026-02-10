@@ -36,6 +36,22 @@
         a:visited{
             color: blue;
         }
+        #lock-box {
+            border: 1px solid #ccc;
+            padding: 16px;
+            max-width: 400px;
+            background: #f9f9f9;
+        }
+
+        input {
+            padding: 6px;
+            margin-right: 6px;
+        }
+
+        button {
+            padding: 6px 12px;
+            cursor: pointer;
+        }
         /* 唯一的血族與女巫區塊樣式 */
         #unique_entities {
             background: radial-gradient(circle at top, #1b0f1f 0%, #0c060d 100%);
@@ -1548,6 +1564,13 @@
     </section>
     <section id="intimate_and_carnal_behavior_in_the_pool">
         <h2>水療池中的親密行為</h2>
+        <div id="lock-box">
+            <p>⚠️ 此內容為十八禁，請輸入密碼後閱讀</p>
+            <input type="password" id="passwordInput" placeholder="請輸入密碼">
+            <button onclick="unlockContent()">確認</button>
+            <p id="errorMsg" style="color:red; display:none;">密碼錯誤</p>
+        </div>
+        <div id="secret-content" style="display:none;">
         <p>伊索爾德與弗雷雅迷戀德古拉，因為德古拉不只帥氣，為人還很善良，重點是他很純情。德古拉帥氣的臉蛋和迷人的腹肌常讓她們倆血脈噴張。</p>
         <p>某天德古拉在外頭與聖騎士交手，渾身傷痕累累地跑回木屋。</p>
         <p>伊索爾德和弗雷雅看到德古拉這副模樣，心疼地叫他脫去所有衣物並下水療池養傷。</p>
@@ -1577,6 +1600,22 @@
         <p>
         最後三人一起在水療池中洗澡，享受著彼此的親密與愛意。
         </p>
+        </div>
+        <script>
+            const correctPassword = "ichbindeinVaterunddubistmeinSohn"; // ← 自行修改密碼
+
+            function unlockContent() {
+                const input = document.getElementById("passwordInput").value;
+                const errorMsg = document.getElementById("errorMsg");
+
+                if (input === correctPassword) {
+                    document.getElementById("lock-box").style.display = "none";
+                    document.getElementById("secret-content").style.display = "block";
+                } else {
+                    errorMsg.style.display = "block";
+                }
+            }
+        </script>
     </section>
     <section id="extended_reading">
         <h2>延伸閱讀（同一個GitHub Pages專案）</h2>
