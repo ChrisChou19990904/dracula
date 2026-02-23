@@ -3,50 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>資料庫與正規化說明</title>
+    <title>資料庫架構與正規化分析 - 《神權崩壞》技術文檔</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 20px;
-            background-color: #f9f9f9;
+            font-family: "Noto Sans TC", "微軟正黑體", sans-serif;
+            line-height: 1.8;
+            margin: 20px auto;
+            max-width: 950px;
+            background-color: #f4f4f4;
+            color: #222;
         }
-        h1, h2 {
-            color: #333;
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-bottom: 30px;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #eee;
-        }
+        h1, h2, h3 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px; margin-top: 40px; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        th, td { border: 1px solid #ccc; padding: 12px; text-align: left; }
+        th { background-color: #3498db; color: white; }
+
+        /* 開發者風格代碼區塊 */
         code {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
             display: block;
-            background-color: #eee;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-            white-space: pre-wrap;
+            line-height: 1.6;
+            margin: 15px 0;
+            overflow-x: auto;
+            border-left: 5px solid #d4af37;
         }
-        ul {
-            margin-bottom: 20px;
+        .tip {
+            background: #e8f5e9;
+            border-left: 5px solid #2e7d32;
+            padding: 15px;
+            margin: 20px 0;
+            font-weight: bold;
         }
-        a{
-            text-decoration:none;
+        .warning {
+            background: #fff3e0;
+            border-left: 5px solid #f57c00;
+            padding: 15px;
+            margin: 20px 0;
         }
-        a:hover{
-            text-decoration: underline;
-        }
-        a:visited{
-            color: blue;
-        }
+        a { text-decoration: none; color: #3498db; font-weight: bold; }
+        a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -122,70 +121,143 @@
     </tr>
 </table>
 
-<h2>3. 資料庫使用建議</h2>
-<ul>
-    <li>純單機遊戲：可以完全不使用資料庫，存檔在本地即可。</li>
-    <li>多人遊戲或線上服務：SQL 用於帳號、課金；NoSQL 用於即時狀態、快取、排行榜。</li>
-    <li>大型遊戲：混合架構最常見（SQL + Redis + 專用遊戲服務器）。</li>
-</ul>
+<h2>3. 遊戲開發中的資料庫應用場景</h2>
+<p>根據遊戲規模與營運需求，開發者會選擇單一或混合式的資料架構：</p>
 
-<h2>4. 正規化 (Database Normalization)</h2>
-<p>正規化是整理資料表結構的方法，目的是減少資料冗餘與避免異常更新。</p>
-<ul>
-    <li><strong>第一正規化 (1NF)</strong>：每個欄位都是原子值，表格中不能有重複欄位或集合。</li>
-    <li><strong>第二正規化 (2NF)</strong>：滿足 1NF，且每個非主鍵欄位完全依賴主鍵。</li>
-    <li><strong>第三正規化 (3NF)</strong>：滿足 2NF，且非主鍵欄位不依賴其他非主鍵欄位。</li>
-</ul>
+<table>
+    <thead>
+    <tr>
+        <th>遊戲規模</th>
+        <th>資料存儲方案</th>
+        <th>應用細節</th>
+        <th>核心目的</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><strong>純單機遊戲</strong></td>
+        <td>Local Storage / 存檔文件</td>
+        <td>.json, .dat 或 SQLite 存於玩家本機。</td>
+        <td>零延遲、無需伺服器成本。</td>
+    </tr>
+    <tr>
+        <td><strong>多人 / 雲端服務</strong></td>
+        <td>混合架構 (SQL + NoSQL)</td>
+        <td><strong>SQL:</strong> 帳號、課金、商城交易。<br><strong>NoSQL:</strong> 好友清單、即時訊息。</td>
+        <td>確保交易安全並提升社交互動速度。</td>
+    </tr>
+    <tr>
+        <td><strong>大型開放世界 (MMO)</strong></td>
+        <td>複合架構 (SQL + Redis + 快取)</td>
+        <td><strong>SQL:</strong> 核心數據存檔。<br><strong>Redis:</strong> 全球排行榜、玩家坐標快取。</td>
+        <td>在高並發下維持數據一致性與讀取效能。</td>
+    </tr>
+    </tbody>
+</table>
 
-<h2>5. 正規化 SQL 範例</h2>
 
-<h3>初始表 (未正規化)</h3>
-<code>
-    CREATE TABLE Players (
-    PlayerID INT,
-    PlayerName VARCHAR(50),
-    Game1 VARCHAR(50),
-    Game1Score INT,
-    Game2 VARCHAR(50),
-    Game2Score INT
-    );
-</code>
 
-<h3>1NF - 每個欄位都是原子值</h3>
-<code>
-    CREATE TABLE PlayerGames (
-    PlayerID INT,
-    PlayerName VARCHAR(50),
-    GameName VARCHAR(50),
-    Score INT,
-    PRIMARY KEY (PlayerID, GameName)
-    );
-</code>
+[Image of basic client-server game architecture]
 
-<h3>2NF - 消除部分依賴，拆表</h3>
-<code>
-    CREATE TABLE Players (
-    PlayerID INT PRIMARY KEY,
-    PlayerName VARCHAR(50),
-    CountryID INT
-    );
 
-    CREATE TABLE Countries (
-    CountryID INT PRIMARY KEY,
-    CountryName VARCHAR(50)
-    );
+<div class="tip">
+    <strong>架構思維：</strong> 在遊戲實務中，「混合架構」是業界標準。我們利用 SQL 的 ACID 特性保護玩家資產（如虛擬貨幣），利用 Redis 的記憶體讀取特性處理每秒數萬次的戰鬥狀態更新。
+</div>
 
-    CREATE TABLE PlayerGames (
-    PlayerID INT,
-    GameName VARCHAR(50),
-    Score INT,
-    PRIMARY KEY (PlayerID, GameName)
-    );
-</code>
+<section>
+    <h2>4. 資料庫正規化實戰：以主角群設定為例</h2>
+    <p>正規化是整理資料結構的方法，目的在於減少冗餘、避免更新異常。以下透過<strong>德古拉、伊索爾德、芙蕾亞</strong>的資料演釋正規化過程。</p>
 
-<h3>3NF - 消除傳遞依賴</h3>
-<p>Countries 表格讓 Player 表不再依賴非主鍵欄位 (CountryName)，符合 3NF。</p>
+    <h3>初始狀態 (未正規化 - 0NF)</h3>
+    <p>將所有生理屬性與多項能力塞入同一表，導致欄位違反原子性，且產生大量重複資訊。</p>
+    <code>
+        -- 冗餘嚴重且無法有效查詢
+        CREATE TABLE Characters_Raw (
+        Name VARCHAR(20),
+        Species VARCHAR(20),
+        Abilities TEXT, -- "變形, 催眠" (多值依賴)
+        Weaknesses TEXT, -- "陽光, 銀製品"
+        CanSweat BOOLEAN,
+        HasFertility BOOLEAN
+        );</code>
 
+    <h3>第一正規化 (1NF) - 原子性 (Atomicity)</h3>
+    <p>確保每個欄位不可再分。將德古拉的多項能力拆分為獨立紀錄。</p>
+    <code>
+        CREATE TABLE Characters_1NF (
+        CharacterID INT,
+        CharacterName VARCHAR(20),
+        AbilityName VARCHAR(50),
+        PRIMARY KEY (CharacterID, AbilityName)
+        );</code>
+
+    <h3>第二正規化 (2NF) - 消除部分依賴</h3>
+    <p>確保非主鍵欄位完全依賴於主鍵。將角色基本資料與能力表拆分。</p>
+    <code>
+        -- 角色主表
+        CREATE TABLE Characters_2NF (
+        CharacterID INT PRIMARY KEY,
+        CharacterName VARCHAR(20),
+        Height_cm INT,
+        BirthPlace VARCHAR(50)
+        );
+
+        -- 角色能力表
+        CREATE TABLE CharacterAbilities_2NF (
+        CharacterID INT,
+        AbilityName VARCHAR(50),
+        PRIMARY KEY (CharacterID, AbilityName)
+        );</code>
+
+    <h3>第三正規化 (3NF) - 消除傳遞依賴</h3>
+    <p>非主鍵欄位不可依賴於其他非主鍵欄位（角色 -> 物種 -> 生理特徵）。</p>
+
+    <code>
+        -- 1. 物種生理定義表
+        CREATE TABLE SpeciesPhysiology (
+        SpeciesType VARCHAR(20) PRIMARY KEY,
+        CanSweat BOOLEAN,
+        CanExcrete BOOLEAN, -- 是否排泄
+        HasFertility BOOLEAN
+        );
+
+        -- 2. 角色表
+        CREATE TABLE Characters_3NF (
+        CharacterID INT PRIMARY KEY,
+        CharacterName VARCHAR(20),
+        SpeciesType VARCHAR(20),
+        FOREIGN KEY (SpeciesType) REFERENCES SpeciesPhysiology(SpeciesType)
+        );</code>
+
+    <h3>第四正規化 (4NF) - 消除多值依賴</h3>
+    <p>以<strong>芙蕾亞</strong>為例：將互不相關的多值資訊（技能與弱點）徹底拆分，避免無意義的資料組合爆炸。</p>
+
+    <code>
+        -- 1. 角色技能表 (芙蕾亞有跆拳道、空手道等)
+        CREATE TABLE CharacterSkills (
+        CharacterID INT,
+        SkillName VARCHAR(50),
+        PRIMARY KEY (CharacterID, SkillName)
+        );
+
+        -- 2. 角色弱點表 (德古拉與芙蕾亞的弱點清單)
+        CREATE TABLE CharacterWeaknesses (
+        CharacterID INT,
+        WeaknessName VARCHAR(50),
+        PRIMARY KEY (CharacterID, WeaknessName)
+        );</code>
+
+    <h3>第五正規化 (5NF) - 投影連接正規化</h3>
+    <p>處理三方循環關聯（角色、物種、特定環境加成），確保資料拆分後可無損還原。</p>
+</section>
+
+<section>
+    <h2>5. 結論：開發者的技術權衡 (Trade-off)</h2>
+    <div class="warning">
+        「過度正規化會增加 JOIN 的運算開銷，影響讀取效能。」
+    </div>
+    <p>在實際開發中，我們通常遵循 <strong>3NF / 4NF</strong>。但在處理高頻率讀取的即時數值時，會適度採用<strong>反正規化 (Denormalization)</strong>，以空間換取時間，確保遊戲運行流暢。</p>
+</section>
 <h2>6. 總結</h2>
 <ul>
     <li>正規化可以避免資料重複、減少錯誤、便於維護。</li>
